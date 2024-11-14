@@ -58,7 +58,7 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     )
 })
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (mySprite.tileKindAt(TileDirection.Left, assets.tile`myTile16`) || mySprite.tileKindAt(TileDirection.Right, assets.tile`myTile16`) || (mySprite.tileKindAt(TileDirection.Top, assets.tile`myTile16`) || mySprite.tileKindAt(TileDirection.Bottom, assets.tile`myTile16`))) {
+    if (mySprite.tileKindAt(TileDirection.Left, assets.tile`transparency16`) || mySprite.tileKindAt(TileDirection.Right, assets.tile`transparency16`) || (mySprite.tileKindAt(TileDirection.Top, assets.tile`transparency16`) || mySprite.tileKindAt(TileDirection.Bottom, assets.tile`transparency16`))) {
     	
     }
 })
@@ -120,6 +120,13 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     100,
     false
     )
+})
+scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile16`, function (sprite, location) {
+    if (controller.B.isPressed()) {
+        tiles.setTileAt(location, assets.tile`myTile17`)
+        info.changeScoreBy(3)
+        music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.InBackground)
+    }
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     animation.runImageAnimation(
@@ -240,6 +247,8 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     )
 })
 let mySprite: Sprite = null
+info.setLife(3)
+info.setScore(0)
 mySprite = sprites.create(img`
     . . . . f f f f . . . . . 
     . . f f f f f f f f . . . 
@@ -261,4 +270,4 @@ mySprite = sprites.create(img`
 controller.moveSprite(mySprite)
 scene.cameraFollowSprite(mySprite)
 tiles.setCurrentTilemap(tilemap`level2`)
-tiles.placeOnTile(mySprite, tiles.getTileLocation(7, 8))
+tiles.placeOnTile(mySprite, tiles.getTileLocation(149, 97))
