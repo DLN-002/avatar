@@ -1,3 +1,6 @@
+namespace SpriteKind {
+    export const Monk1 = SpriteKind.create()
+}
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     animation.runImageAnimation(
     mySprite,
@@ -58,8 +61,15 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     )
 })
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (mySprite.tileKindAt(TileDirection.Left, assets.tile`myTile16`) || mySprite.tileKindAt(TileDirection.Right, assets.tile`myTile16`) || (mySprite.tileKindAt(TileDirection.Top, assets.tile`myTile16`) || mySprite.tileKindAt(TileDirection.Bottom, assets.tile`myTile16`))) {
+    if (mySprite.tileKindAt(TileDirection.Left, assets.tile`transparency16`) || mySprite.tileKindAt(TileDirection.Right, assets.tile`transparency16`) || (mySprite.tileKindAt(TileDirection.Top, assets.tile`transparency16`) || mySprite.tileKindAt(TileDirection.Bottom, assets.tile`transparency16`))) {
     	
+    }
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Monk1, function (sprite, otherSprite) {
+    if (controller.B.isPressed()) {
+        game.showLongText("My name is Gwan the monk and this is the air bending temple.", DialogLayout.Top)
+        game.showLongText("Do you see that tile on the floor?", DialogLayout.Top)
+        game.showLongText("That tile holds the secret to air bending!", DialogLayout.Top)
     }
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -120,6 +130,20 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     100,
     false
     )
+})
+scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile21`, function (sprite, location) {
+    if (controller.B.isPressed()) {
+        game.showLongText("You learned air bending!", DialogLayout.Top)
+        Bending_Type = "air"
+        music.play(music.melodyPlayable(music.powerUp), music.PlaybackMode.InBackground)
+    }
+})
+scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile16`, function (sprite, location) {
+    if (controller.B.isPressed()) {
+        tiles.setTileAt(location, assets.tile`myTile17`)
+        info.changeScoreBy(3)
+        music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.InBackground)
+    }
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     animation.runImageAnimation(
@@ -239,7 +263,10 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     false
     )
 })
+let Bending_Type = ""
 let mySprite: Sprite = null
+info.setLife(3)
+info.setScore(0)
 mySprite = sprites.create(img`
     . . . . f f f f . . . . . 
     . . f f f f f f f f . . . 
@@ -261,4 +288,23 @@ mySprite = sprites.create(img`
 controller.moveSprite(mySprite)
 scene.cameraFollowSprite(mySprite)
 tiles.setCurrentTilemap(tilemap`level2`)
-tiles.placeOnTile(mySprite, tiles.getTileLocation(7, 8))
+tiles.placeOnTile(mySprite, tiles.getTileLocation(149, 97))
+let mySprite2 = sprites.create(img`
+    . . . . f f f f . . . . 
+    . . f f d d d d f f . . 
+    . f d d d d d d d d f . 
+    f d d d 4 d d d d d d f 
+    f d d 4 4 4 d d d d d f 
+    f d d 4 4 4 4 d d d d f 
+    f 4 d 4 4 4 4 4 4 d 4 f 
+    f 4 4 f f 4 4 f f 4 4 f 
+    f d 4 d d d d d d 4 d f 
+    . f d d d b b d d d f . 
+    . f f e d d d d e f f . 
+    e 4 f 5 4 d d 4 5 f 4 e 
+    4 d f 4 4 d d 4 4 f d 4 
+    4 4 f 5 5 5 5 5 5 f 4 4 
+    . . . f f f f f f . . . 
+    . . . f f . . f f . . . 
+    `, SpriteKind.Monk1)
+tiles.placeOnTile(mySprite2, tiles.getTileLocation(169, 105))
